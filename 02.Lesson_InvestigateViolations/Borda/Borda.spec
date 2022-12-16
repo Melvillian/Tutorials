@@ -32,6 +32,10 @@ rule correctPointsIncreaseToContenders(address first, address second, address th
     uint256 secondPointsBefore = getPointsOfContender(e, second);
     uint256 thirdPointsBefore = getPointsOfContender(e, third);
 
+    require firstPointsBefore <= max_uint256 - 3;
+    require secondPointsBefore <= max_uint256 - 2;
+    require thirdPointsBefore <= max_uint256 - 2;
+
     vote(e, first, second, third);
 
     uint256 firstPointsAfter = getPointsOfContender(e, first);
@@ -62,6 +66,7 @@ rule contendersPointsNondecreasing(method f, address contender){
     env e; calldataarg args;
     uint8 age; bool registeredBefore; uint256 pointsBefore;
     age, registeredBefore, pointsBefore = getFullContenderDetails(e, contender);
+    require pointsBefore <= max_uint256 - 3;
     require pointsBefore > 0 => registeredBefore; // why is this needed? try to omit this line and see what happens
     f(e,args);
     bool registeredAfter; uint256 pointsAfter;
