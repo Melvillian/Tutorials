@@ -31,8 +31,6 @@ rule totalFundsAfterDeposit(uint256 amount) {
 	assert ( totalAfter >=  userFundsAfter, "Total funds are less than a user's funds " );
 }
 
-
-
 rule totalFundsAfterDepositWithPrecondition(uint256 amount) {
 	env e; 
 	
