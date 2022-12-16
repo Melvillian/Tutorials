@@ -88,9 +88,10 @@ contract Borda is IBorda {
         }
 
         _voters[msg.sender].voted = true;
+        // @note the votes were all getting incremented by 3, when it should actually be 3, 2, and 1
         voteTo(first, 3);
-        voteTo(second, 3);
-        voteTo(third, 3);
+        voteTo(second, 2);
+        voteTo(third, 1);
         
         return true;
     }
