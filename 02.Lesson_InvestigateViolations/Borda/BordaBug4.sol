@@ -92,7 +92,7 @@ contract Borda is IBorda {
         voteTo(second, 2);
         voteTo(third, 1);
 
-        _voters[msg.sender].registered = false;
+        // @note this incorrectly set the voter.registered to false
         return true;
     }
 
