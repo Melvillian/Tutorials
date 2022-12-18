@@ -213,7 +213,8 @@ contract ERC20 is IERC20, IERC20Metadata {
         _approve(
             msg.sender,
             spender,
-            _allowances[msg.sender][spender] - addedValue
+            // @note the operator was `-`, but it should be `+`
+            _allowances[msg.sender][spender] + addedValue
         );
         return true;
     }
