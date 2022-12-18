@@ -12,7 +12,10 @@ rule integrityOfTransfer(address recipient, uint256 amount) {
 	uint256 balanceRecipientBefore = balanceOf(e, recipient);
 	transfer(e, recipient, amount);
 
-	assert balanceRecipientBefore + balanceSenderBefore == balanceOf(e, e.msg.sender) + balanceOf(e, recipient), "the total funds before and after a transfer should remain the constant";
+    uint256 balanceSenderAfter = balanceOf(e, e.msg.sender);
+    uint256 balanceRecipientAfter = balanceOf(e, recipient);
+
+	assert balanceRecipientBefore + balanceSenderBefore == balanceSenderAfter + balanceRecipientAfter, "the total funds before and after a transfer should remain the constant";
 }
 
 
@@ -34,6 +37,8 @@ rule integrityOfIncreaseAllowance(address spender, uint256 amount) {
 	uint256 allowanceBefore = allowance(e, e.msg.sender, spender);
 	increaseAllowance(e, spender, amount);
 	uint256 allowanceAfter = allowance(e, e.msg.sender, spender);
+
+    uint256 theAmount = amount;
 
 	assert allowanceAfter == allowanceBefore + amount, "allowance increased correctly";
     // Can you think of a way to strengthen this assert to account to all possible amounts?
