@@ -18,6 +18,12 @@ pragma solidity ^0.8.7;
  *
  * - In case that the meeting has already started and the end time arrived, anybody can change the status
  * to ENDED.
+ * 
+ * UNITIALIZED
+ * PENDING
+ * STARTED
+ * CANCELLED
+ * ENDED
  */
 
 interface IMeetingScheduler {
