@@ -45,9 +45,11 @@ rule startOnTime(method f, uint256 meetingId) {
 	uint256 startTime = getStartTimeById(e, meetingId);
 	uint256 endTime = getEndTimeById(e, meetingId);
     
-	assert (stateBefore == 1 && stateAfter == 2) => startTime <= e.block.timestamp, "started a meeting before the designated starting time.";
-	assert (stateBefore == 1 && stateAfter == 2) => endTime > e.block.timestamp, "started a meeting after the designated end time.";
+	uint256 blockTimestamp = e.block.timestamp;
+	assert (stateBefore == 1 && stateAfter == 2) => startTime <= blockTimestamp, "started a meeting before the designated starting time.";
+	assert (stateBefore == 1 && stateAfter == 2) => endTime > blockTimestamp, "started a meeting after the designated end time.";
 	
+	// ?? requireInvariant
 }
 
 
@@ -61,8 +63,8 @@ rule checkStartedToStateTransition(method f, uint256 meetingId) {
 	
 	uint8 state = getStateById(e, meetingId);
 	
-	assert (stateBefore == 2 => (state == 2 || state == 4)), "the status of the meeting changed from STARTED to an invalid state";
 	assert ((stateBefore == 2 && state == 3) => f.selector == endMeeting(uint256).selector), "the status of the meeting changed from STARTED to ENDED through a function other then endMeeting()";
+	assert (stateBefore == 2 && f.selector != endMeeting(uint256).selector => (state == 2 || state == 4)), "the status of the meeting changed from STARTED to an invalid state";
 }
 
 
