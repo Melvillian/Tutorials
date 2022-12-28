@@ -7,6 +7,24 @@ methods {
     
 }
 
+function getRegistered(address contender) returns bool {
+    uint8 age; bool registered; uint256 points;
+    age, registered, points = getFullContenderDetails(contender);
+
+    return registered;
+}
+
+function getPoints(address contender) returns uint256 {
+    bool reg = getRegistered(contender);
+    uint8 age; bool registered; uint256 points;
+    age, registered, points = getFullContenderDetails(contender);
+
+    return points;
+}
+definition MAX_UINT256() returns uint256 = 0xffffffffffffffffffffffffffffffff;
+
+definition is_even(uint256 x) returns bool = exists uint256 y . 2 * y == x;
+
 // Checks that a voter's "registered" mark is changed correctly - 
 // If it's false after a function call, it was false before
 // If it's true after a function call, it either started as true or changed from false to true via registerVoter()
@@ -58,12 +76,11 @@ rule onceBlockedNotOut(method f, address voter){
 // Checks that a contender's point count is non-decreasing
 rule contendersPointsNondecreasing(method f, address contender){
     env e; calldataarg args;
-    uint8 age; bool registeredBefore; uint256 pointsBefore;
-    age, registeredBefore, pointsBefore = getFullContenderDetails(contender);
+    bool registeredBefore = getRegistered(contender);
+    uint256 pointsBefore = getPoints(contender);
     require pointsBefore > 0 => registeredBefore; 
     f(e,args);
-    bool registeredAfter; uint256 pointsAfter;
-    age, registeredAfter, pointsAfter = getFullContenderDetails(contender);
+    uint256 pointsAfter = getPoints(contender);
 
     assert (pointsAfter >= pointsBefore);
 }

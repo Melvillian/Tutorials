@@ -25,13 +25,13 @@ In general, creating an arbitrary `env` variable and passing it to the function 
 
 Another reason to declare functions, even if they aren't `envfree`, is to make the specification more self-contained and readable. 
 
-- [ ] Read the documentation on [method declarations](https://certora.atlassian.net/wiki/spaces/CPD/pages/181960777/Method+Declarations) up to "Summary Declarations" (not including). Notice that the documentation refers to things that we haven't learned yet. Don't worry; we will get to it in the future.
+- [X] Read the documentation on [method declarations](https://certora.atlassian.net/wiki/spaces/CPD/pages/181960777/Method+Declarations) up to "Summary Declarations" (not including). Notice that the documentation refers to things that we haven't learned yet. Don't worry; we will get to it in the future.
 
 This directory contains the three systems from the Lesson 1 Exercise. The interface implementations are the fixed versions (all the rules pass on them out of the box).
 
-- [ ] Write a methods block for each spec and declare as `envfree` every possible function.
+- [X] Write a methods block for each spec and declare as `envfree` every possible function.
 
-- [ ] Run the verification to make sure that your declarations work. You should get a verification report where all rules are passing.
+- [X] Run the verification to make sure that your declarations work. You should get a verification report where all rules are passing.
 
 </br>
 

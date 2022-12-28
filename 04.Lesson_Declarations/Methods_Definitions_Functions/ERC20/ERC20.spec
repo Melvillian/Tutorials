@@ -6,14 +6,18 @@
  * we specify (or selecting) to address one particular path - when the f.selector was scheduleMeeting.
  */
 
+methods {
+	balanceOf(address) returns uint256 envfree
+}
+
 // Checks that the sum of sender and recipient accounts remains the same after transfer(), i.e. assets doesn't disappear nor created out of thin air
 rule integrityOfTransfer(address recipient, uint256 amount) {
 	env e;
-	uint256 balanceSenderBefore = balanceOf(e, e.msg.sender);
-	uint256 balanceRecipientBefore = balanceOf(e, recipient);
+	uint256 balanceSenderBefore = balanceOf(e.msg.sender);
+	uint256 balanceRecipientBefore = balanceOf(recipient);
 	transfer(e, recipient, amount);
-	uint256 balanceSenderAfter = balanceOf(e, e.msg.sender);
-	uint256 balanceRecipientAfter = balanceOf(e, recipient);
+	uint256 balanceSenderAfter = balanceOf(e.msg.sender);
+	uint256 balanceRecipientAfter = balanceOf(recipient);
 
 	assert balanceRecipientBefore + balanceSenderBefore == balanceSenderAfter + balanceRecipientAfter, "the total funds before and after a transfer should remain the constant";
 }
@@ -47,9 +51,9 @@ rule integrityOfIncreaseAllowance(address spender, uint256 amount) {
 rule balanceChangesFromCertainFunctions(method f, address user){
     env e;
     calldataarg args;
-    uint256 userBalanceBefore = balanceOf(e, user);
+    uint256 userBalanceBefore = balanceOf(user);
     f(e, args);
-    uint256 userBalanceAfter = balanceOf(e, user);
+    uint256 userBalanceAfter = balanceOf(user);
 
     assert userBalanceBefore != userBalanceAfter => 
         (f.selector == transfer(address, uint256).selector ||
@@ -63,11 +67,11 @@ rule balanceChangesFromCertainFunctions(method f, address user){
 // 	env e;
 // 	calldataarg args;
 // 	uint256 totalSupplyBefore = totalSupply(e);
-//     uint256 userBalanceBefore = balanceOf(e, user);
+//     uint256 userBalanceBefore = balanceOf(user);
 //     require totalSupplyBefore >= userBalanceBefore;
 //     f(e, args);
 //     uint256 totalSupplyAfter = totalSupply(e);
-//     uint256 userBalanceAfter = balanceOf(e, user);
+//     uint256 userBalanceAfter = balanceOf(user);
 
 // 	assert totalSupplyAfter >= userBalanceAfter, "msg";
 // }
