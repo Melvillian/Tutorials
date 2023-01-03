@@ -1,0 +1,34 @@
+# Properties
+
+## SafeMath
+
+1. safeAdd always reverts on overflow
+2. safeAdd results in the correct sum of the 2 inputs
+3. safeSub always reverts on underflow
+4. safeAdd results in the correct subtraction of the 2 inputs
+
+## Token
+
+1. sum of balances always equals totalSupply
+2. transferTo does not change totalSupply
+3. mint increases balances and totalSupply correctly
+
+## AuctionImpl
+
+1. only owner can create a new auction
+2. auction prize is monotonically decreasing (or remains the same) for all calls
+3. token balance of caller always decreases when bid is called, and token balance of previous winner always increases
+4. every successful call to bid results in msg.sender == winner
+5. `close` results in totalsupply increasing by prize amount
+6. the totaly supply can only go up with a successful call to close
+7. bid_expiry and end_time never decrease
+8. iff an address is the lowest bid, then they are the only one to receive tokens
+9. iff an address is the lowest bid, then they receive tokens equal to their bid (this is a stronger version of the above rule)
+10. only 1 user can receive tokens
+
+
+## Additional Changes after looking at propertiesList.md
+
+1. the only way to increase your balance of token (excluding external transfers) is to be the msg.sender and to have called `close`
+2. the only way to cancel a bid is if it's closed
+3. 
