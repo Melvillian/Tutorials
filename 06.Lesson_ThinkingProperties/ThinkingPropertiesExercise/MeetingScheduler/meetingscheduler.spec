@@ -16,6 +16,8 @@ definition initialized(uint256 meetingId) returns bool =
         getEndTimeById(meetingId) != 0 &&
         getStateById(meetingId) != 0;
 
+definition UNINITIALIZED() returns uint256 = 0;
+
 function callFunctionWithParams(method f, uint256 meetingId, uint256 startTime, uint256 endTime) {
     env e;
 
@@ -166,5 +168,35 @@ rule uninitializedStateTransition(uint256 meetingId) {
 
 // numParticipants should never decrease
 rule numParticipantsShouldNeverDecrease(method f, uint256 meetingId) {
-    
+    env e;
+    calldataarg args;
+
+    uint256 numParticipantsBefore = getNumOfParticipents(meetingId);
+    uint8 stateBefore = getStateById(meetingId);
+
+    // need to handle the case where scheduleMeeting can be called (and set
+    // numParticipants to 0) and not called in a separate manner
+    if (stateBefore == 0) {
+        // if the state is unitialized, then we assume nothing has been done with
+        // the meeting, so assuming numParticipants == 0 is a sound assumption
+        require numParticipantsBefore == 0;
+    }
+
+    f(e, args);
+
+    uint256 numParticipantsAfter = getNumOfParticipents(meetingId);
+
+    assert (numParticipantsBefore <= numParticipantsAfter, "numParticipants decreased");
+}
+
+// scheduleMeeting meeting should only fail on a particular set of inputs
+rule scheduleMeetingWorksCorrectly(uint256 meetingId, method f, uint256 startTime, uint256 endTime) {
+    env e;
+    calldataarg args;
+
+    scheduleMeeting@withrevert(e, meetingId, startTime, endTime);
+
+    uint8 state = getStateById(meetingId);
+
+    assert (lastReverted => state != UNINITIALIZED() || (startTime > endTime || e.block.timestamp > startTime));
 }

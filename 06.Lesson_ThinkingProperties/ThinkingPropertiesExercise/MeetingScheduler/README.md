@@ -45,7 +45,7 @@ def initialized:
 
 ## Unit Tests
 
-13. `scheduleMeeting` should only fail if the same meetingId is used and startTime, endTime are both zero
+13. `scheduleMeeting` should only fail if state is not UNINITIALIZED, and startTime > endTime && startTime <= block.timestamp
 14. `joinMeeting` always increases numParticipants by exactly 1
 
 
