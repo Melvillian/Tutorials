@@ -189,6 +189,12 @@ rule numParticipantsShouldNeverDecrease(method f, uint256 meetingId) {
     assert (numParticipantsBefore <= numParticipantsAfter, "numParticipants decreased");
 }
 
+// TODO: figure out why the assert at the end is passing, even though it shouldn't.
+// I think this should not pass because it is possible for the `scheduleMeeting` call
+// to revert when `state == 0` (specifically, if state == 0 && startTime > endTime).
+// How come the CVT isn't finding any errors, am I using @withrevert incorrectly?
+//
+// Verification Report: https://prover.certora.com/output/20739/30f1a79670be41648dafead9b4c6604a?anonymousKey=2f01c25f3a82e050ce9a48b765c12d02c2f55e64
 // scheduleMeeting meeting should only fail on a particular set of inputs
 rule scheduleMeetingWorksCorrectly(uint256 meetingId, method f, uint256 startTime, uint256 endTime) {
     env e;
@@ -198,5 +204,5 @@ rule scheduleMeetingWorksCorrectly(uint256 meetingId, method f, uint256 startTim
 
     uint8 state = getStateById(meetingId);
 
-    assert (lastReverted => state != UNINITIALIZED() || (startTime > endTime || e.block.timestamp > startTime));
+    assert (lastReverted => (state != 0)); // <-- this should not pass!
 }
