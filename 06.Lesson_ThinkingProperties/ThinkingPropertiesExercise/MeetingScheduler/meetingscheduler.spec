@@ -37,40 +37,42 @@ function callFunctionWithParams(method f, uint256 meetingId, uint256 startTime, 
     }
 }
 
+// any function called on meeting #1 will have no effect on another meeting
+rule aChangeToOneMeetingDoesNotAffectTheOther(uint256 meetingId1, uint256 meetingId2) {
+    env e1; calldataarg args1;
+    env e2; calldataarg args2;
+    method f1;
+    method f2;
 
-// TODO: I don't know how to enforce that the parametric function calls each need to use a specific
-// meetingId. Gotta ask Mike
-// any 2 functions called on 2 different meetingId's will have no effect on each other's meetings
-// rule aChangeToOneMeetingDoesNotAffectTheOther(uint256 meetingId1, uint256 meetingId2) {
-//     env e1; calldataarg args1;
-//     env e2; calldataarg args2;
-//     method f1;
-//     method f2;
+    // call the parametric function on two different meetings
+    require meetingId1 != meetingId2;
 
-//     // call the parametric function on two different meetings
-//     require meetingId1 != meetingId2;
+    // get the state of the 2 meetings, #1 and #2, before making a function call
+    
+    uint256 startTime1Before; uint256 endTime1Before;
+    startTime1Before = getStartTimeById(meetingId1);
+    endTime1Before = getEndTimeById(meetingId1);
 
-//     // get the state of the 2 meetings before the calls
-//     uint8 status1Before; uint256 startTime1Before; uint256 endTime1Before; uint256 numParticipants1Before;
-//     status1Before = getStateById(meetingId1);
-//     startTime1Before = getStartTimeById(meetingId1);
-//     endTime1Before = getEndTimeById(meetingId1);
-//     numParticipants1Before = getNumOfParticipents(meetingId1);
+    uint8 status2Before; uint256 startTime2Before; uint256 endTime2Before; uint256 numParticipants2Before;
+    status2Before = getStateById(meetingId2);
+    startTime2Before = getStartTimeById(meetingId2);
+    endTime2Before = getEndTimeById(meetingId2);
+    numParticipants2Before = getNumOfParticipents(meetingId2);
 
-//     uint8 status2Before; uint256 startTime2Before; uint256 endTime2Before; uint256 numParticipants2Before;
-//     status2Before = getStateById(meetingId2);
-//     startTime2Before = getStartTimeById(meetingId2);
-//     endTime2Before = getEndTimeById(meetingId2);
-//     numParticipants2Before = getNumOfParticipents(meetingId2);
+    // make the state change on #1
+    callFunctionWithParams(f1, meetingId1, startTime1Before, endTime1Before);
 
-
-//     f1(e1, args1);
-
-//     // TODO
-
-//     assert true;
-
-// }
+    // check that calls to #1 had no effect on #2
+    uint8 status2After; uint256 startTime2After; uint256 endTime2After; uint256 numParticipants2After;
+    status2After = getStateById(meetingId2);
+    startTime2After = getStartTimeById(meetingId2);
+    endTime2After = getEndTimeById(meetingId2);
+    numParticipants2After = getNumOfParticipents(meetingId2);
+    assert (status2Before == status2After, "status changed");
+    assert (startTime2Before == startTime2After, "startTime changed");
+    assert (endTime2Before == endTime2After, "endTime changed");
+    assert (numParticipants2Before == numParticipants2After, "numParticipants changed");
+}
 
 
 // TODO: i don't know how to compare reachability of 2 function calls (1 by the organizer, the other
