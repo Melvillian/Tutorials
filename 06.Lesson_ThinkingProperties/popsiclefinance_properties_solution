@@ -1,0 +1,47 @@
+# Rules
+
+## Valid States
+
+def empty()
+    - totalFeesEarnedPerShare == 0
+    - owner != address(0)
+    - balanceOf(any_address) == 0
+
+1. ERC20 balance for a user should never be less than the sum of allowances across all other addresses
+2. When popsicle balance of all users is 0, then total supply should equal 0, and vice versa
+
+## State Transitions
+
+- 
+
+## Variable Transitions
+
+3. deposit is the only function that can increase currentContract's ETH balance
+4. withdraw is the only function that can decrease currentContract's ETH balance
+
+
+## High-Level Properties
+
+
+## Unit Tests
+
+
+## Risk Analysis
+
+5. When popsicle total supply is nonzero, it must be possible for at least 1 user to successfully call withdraw and bring their balance of popsicle to 0
+
+# Rule Priority
+
+## High Priority
+
+- #5, because otherwise users would not always be able to successfully exit the system
+- #3, because then it's possible for an address other than the user to reduce their balance in the pool
+- #2, because otherwise DoS is possible
+
+## Medium Priority
+
+- #4, because then the contract works in an unexpected way where it can receive ETH when it shouldn't
+- #1, because then transfers will fail when they should not.
+
+## Low Priority
+
