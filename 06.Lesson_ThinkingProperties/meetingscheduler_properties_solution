@@ -1,5 +1,9 @@
 # Rules
 
+## Takeaways
+1. proving valid states is hard when using rules because you need a bunch possibly unsound `require`s
+2. For the State Transitions when you're narrowing down the function selectors to a allowlisted set, you should use `filter` because that will be speedier
+
 ## Valid States
 
 def uninitialized:
@@ -13,8 +17,11 @@ def initialized:
     - status is not UNINITIALIZED
 
 
+
+
 1. if status is UNINITIALIZED, then state should be uninitialized
-2. if status is nonzero, then state should be initialized
+    - probably want an invariant here
+2. if status is not UNINITIALIZED, then state should be initialized
 3. if status is ENDED, then block.timestamp must be > endTime 
 4. once status is ENDED, every non-view function should revert
 
@@ -33,7 +40,7 @@ def initialized:
 
 ## High-Level Properties
 
-11. (parametric) All functions that succeed for a non-owner user would also succeed for an owner
+11. (parametric) All functions that succeed for a non-organizer user would also succeed for an organizer
 12. (parametric) The status value can never decrease, only increase or stay the same
 
 ## Unit Tests

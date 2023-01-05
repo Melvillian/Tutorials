@@ -1,5 +1,8 @@
 # Rules
 
+# Takeaways
+1. Valid States tend to be implemented as `invariant`s
+
 ## Valid States
 
 def empty()
@@ -8,7 +11,7 @@ def empty()
     - balanceOf(any_address) == 0
 
 1. ERC20 balance for a user should never be less than the sum of allowances across all other addresses
-2. When popsicle balance of all users is 0, then total supply should equal 0, and vice versa
+2. When popsicle pool balance is 0 & fees are Y, then total supply should equal 0, and vice versa
 
 ## State Transitions
 
@@ -18,6 +21,7 @@ def empty()
 
 3. deposit is the only function that can increase currentContract's ETH balance
 4. withdraw is the only function that can decrease currentContract's ETH balance
+    - not true, because collectFees will decrease the balance
 
 
 ## High-Level Properties
@@ -44,4 +48,5 @@ def empty()
 - #1, because then transfers will fail when they should not.
 
 ## Low Priority
+
 
