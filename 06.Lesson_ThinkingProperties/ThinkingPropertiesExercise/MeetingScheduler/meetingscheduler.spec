@@ -157,5 +157,14 @@ rule uninitializedStateTransition(uint256 meetingId) {
 
     uint256 stateAfter = getStateById(meetingId);
 
-    assert (stateBefore != stateAfter => f.selector == scheduleMeeting(uint256,uint256,uint256).selector, "some other function was called!");
+    assert (stateBefore != stateAfter => f.selector == scheduleMeeting(uint256,uint256,uint256).selector &&
+        stateAfter == 1, "the state transition is invalid");
+}
+
+// TODO write rules 6, 7, 8, 9 from 06.Lesson_ThinkingProperties/meetingscheduler_properties_solution, which
+// all are of the same form as the above rule
+
+// numParticipants should never decrease
+rule numParticipantsShouldNeverDecrease(method f, uint256 meetingId) {
+    
 }
