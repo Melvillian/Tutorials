@@ -75,26 +75,28 @@ rule aChangeToOneMeetingDoesNotAffectTheOther(uint256 meetingId1, uint256 meetin
 }
 
 
-// TODO: i don't know how to compare reachability of 2 function calls (1 by the organizer, the other
-// by the non-organizer using the `storage` syntax. Gotta ask Mike)
+
 // all function calls that succeed for a non-organizer would all succeed for an organizer
-// rule nonOrganizerCallsAlwaysSucceedForOrganizer(address nonOrganizer, address organizer) {
-//     env e; calldataarg args;
+rule nonOrganizerCallsAlwaysSucceedForOrganizer(method f, address nonOrganizer, address organizer) {
+    env e1; env e2; calldataarg args;
 
-//     require e.msg.sender == organizer;
+    require e1.msg.sender == nonOrganizer;
+    require e2.msg.sender == organizer;
 
+    require e1.msg.value == e2.msg.value;
+    require e1.block.timestamp == e2.block.timestamp;
+    require e1.block.number == e2.block.number;
 
-//     // I wanna check, if we start in the same state, and then consider 2 possibilities:
-//     // 1. an organizer calls a function
-//     // 2. a non-organizer calls a function
-//     // then there should be no instances where non-organizer succeeds, and organizer fails
-//     // another way of saying this is that the set of successful function calls for organizer
-//     // is a superset of the non-organizer's set of successful function calls
+    storage initial = lastStorage;
 
+    f(e1, args);
+    bool nonOrgCallSuccess = !lastReverted;
 
-//     // take a snapshot of the state so we can compare 
-//     storage initial = lastStorage;
-// }
+    f(e2, args) at initial;
+    bool orgCallSuccess = !lastReverted;
+
+    assert nonOrgCallSuccess => orgCallSuccess, "A function succeeded for the nonOrganizer, but failed for the organizer";
+}
 
 // after a transition to the ENDED (status = 3), then block.timestamp > endTime
 rule stateOfEnded(uint256 meetingId) {
@@ -202,9 +204,11 @@ rule scheduleMeetingWorksCorrectly(uint256 meetingId, method f, uint256 startTim
     env e;
     calldataarg args;
 
-    scheduleMeeting@withrevert(e, meetingId, startTime, endTime);
-
     uint8 state = getStateById(meetingId);
 
-    assert (lastReverted => (state != 0)); // <-- this should not pass!
+    scheduleMeeting@withrevert(e, meetingId, startTime, endTime);
+
+    bool didRevert = lastReverted;
+
+    assert (didRevert => (state != 0 || e.msg.value != 0 || (e.block.timestamp >= startTime || startTime >= endTime)));
 }
