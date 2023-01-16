@@ -137,17 +137,15 @@ rule stateOfEndedParametric(uint256 meetingId) {
 
 // once a meeting is in the ENDED state, every non-view function called
 // on it should revert (ENDED should be a terminal state)
-rule endStateShouldCauseFailureForAllNonViewFunctions(uint256 meetingId, uint256 startTime, uint256 endTime) {
-    method f;
-
-    require f.isView == false;
+rule endStateShouldCauseFailureForAllNonViewFunctions(method f, uint256 meetingId, uint256 startTime, uint256 endTime)
+    filtered { f -> !f.isView } {
 
     uint8 stateBefore = getStateById(meetingId);
     require stateBefore == 3;
 
-    callFunctionWithParams(f, meetingId, startTime, endTime);
+    callFunctionWithParams@withrevert(f, meetingId, startTime, endTime);
 
-    assert false;
+    assert lastReverted;
 }
 
 rule uninitializedStateTransition(uint256 meetingId) {

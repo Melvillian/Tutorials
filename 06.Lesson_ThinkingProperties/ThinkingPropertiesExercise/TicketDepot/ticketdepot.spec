@@ -17,6 +17,8 @@ rule createEventIsOnlyFunctionThatCanIncreaseNumEvents() {
     env e;
     calldataarg args;
 
+    require numberOfEvents == 0;
+
     uint256 nEventsBefore = numberOfEvents;
 
     f(e, args);
