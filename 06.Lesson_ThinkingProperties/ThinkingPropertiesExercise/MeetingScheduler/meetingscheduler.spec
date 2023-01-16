@@ -84,8 +84,7 @@ rule nonOrganizerCallsAlwaysSucceedForOrganizer(method f, address nonOrganizer, 
     require e2.msg.sender == organizer;
 
     require e1.msg.value == e2.msg.value;
-    require e1.block.timestamp == e2.block.timestamp;
-    require e1.block.number == e2.block.number;
+    require e1.block == e2.block;
 
     storage initial = lastStorage;
 
