@@ -10,6 +10,7 @@ rule can_withdraw() {
     uint256 balance_before = getEthBalance(e.msg.sender);
     uint256 reserves       = getEthBalance(currentContract);
     uint256 funds_before   = getFunds(e.msg.sender);
+    uint256 totalFunds     = getTotalFunds();
 
     withdraw@withrevert(e);
 
@@ -46,3 +47,6 @@ hook Sstore funds[KEY address user] uint256 new_balance
 
 invariant totalFunds_GE_to_sum_of_all_funds()
     getTotalFunds() >= sum_of_all_funds()
+
+invariant totalFunds_GE_to_sum_of_all_funds_strict()
+    getTotalFunds() == sum_of_all_funds()
