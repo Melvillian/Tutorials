@@ -94,11 +94,11 @@ Did your rule find violations?
 
 Is this property an invariant of the system?
 
-- [ ] Now, after trying to write the rule, have a look at the [Partial Solution](Manager/ManagerPartialSolution.spec). This is an almost correct implementation of the rule.
+- [x] Now, after trying to write the rule, have a look at the [Partial Solution](Manager/ManagerPartialSolution.spec). This is an almost correct implementation of the rule.
 
-  - [ ] Run the partial solution on the two buggy implementations of manager. Why doesn't it fail on both of them as expected?
+  - [x] Run the partial solution on the two buggy implementations of manager. Why doesn't it fail on both of them as expected?
 
-  - [ ] The solution pass on [ManagerBug1](Manager/ManagerBug1.sol) because the condition is too strict. Can you find the problem and fix it?
+  - [x] The solution pass on [ManagerBug1](Manager/ManagerBug1.sol) because the condition is too strict. Can you find the problem and fix it?
 
 ### Explanation - Under/Over-Approximation
 
