@@ -7,7 +7,7 @@ methods {
 ghost uint256 numberOfEvents;
 
 hook Sstore numEvents uint16 v STORAGE {
-    numberOfEvents = v;
+    numberOfEvents = numberOfEvents;
 }
 
 
@@ -16,8 +16,6 @@ rule createEventIsOnlyFunctionThatCanIncreaseNumEvents() {
     method f;
     env e;
     calldataarg args;
-
-    require numberOfEvents == 0;
 
     uint256 nEventsBefore = numberOfEvents;
 
