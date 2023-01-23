@@ -110,11 +110,11 @@ In the case of the [Manager Partial Solution](Manager/ManagerPartialSolution.spe
 
 This is a classic example of incorrect usage of precondition in rules.
 
-- [ ] Once you know how to fix the expression, try to run 2 verifications on [ManagerBug1](Manager/ManagerBug1.sol):
+- [x] Once you know how to fix the expression, try to run 2 verifications on [ManagerBug1](Manager/ManagerBug1.sol):
 
-  - [ ] Correct the post-condition while leaving the too-strict pre-condition.
+  - [x] Correct the post-condition while leaving the too-strict pre-condition.
 
-  - [ ] Correct the pre-condition while leaving the "too-strict" post-condition.
+  - [x] Correct the pre-condition while leaving the "too-strict" post-condition.
 
 Notice which of them pass the verification falsely and which caught the bug.
 Do you understand why these are the results?
