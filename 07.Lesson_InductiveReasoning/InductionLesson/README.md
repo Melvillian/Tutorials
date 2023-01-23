@@ -79,18 +79,18 @@ For a more realistic example, [Manager](Manager/Manager.sol) implements transfer
 
 - [x] Fix the rule.
 
-- [ ] Check your rule as sometimes the rule is too strict and overly limits the possible initial states or executions.
+- [x] Check your rule as sometimes the rule is too strict and overly limits the possible initial states or executions.
 
-  - [ ] To check your rule, intentionally insert bugs into the contract. Insert bugs that should be detected by the rule (fail verification).
+  - [x] To check your rule, intentionally insert bugs into the contract. Insert bugs that should be detected by the rule (fail verification).
 
-  - [ ] Rerun the Certora Prover to get a counter example that fits your expectation.
+  - [x] Rerun the Certora Prover to get a counter example that fits your expectation.
 
 - Run the rule on the pre-prepared buggy versions of the code:
   [ManagerBug1](Manager/ManagerBug1.sol) and [ManagerBug2](Manager/ManagerBug2.sol)
 
 Did your rule find violations?
 
-- [ ] Try running the version of the rule as an invariant.
+- [x] Try running the version of the rule as an invariant.
 
 Is this property an invariant of the system?
 

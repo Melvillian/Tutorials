@@ -38,5 +38,5 @@ rule uniqueManagerAsRule(uint256 fundId1, uint256 fundId2, method f) {
 
 
 // /* A version of uniqueManagerAsRule as an invariant */
-// invariant uniqueManagerAsInvariant(uint256 fundId1, uint256 fundId2)
-// 	fundId1 != fundId2 => getCurrentManager(fundId1) != getCurrentManager(fundId2) 
+invariant uniqueManagerAsInvariant(uint256 fundId1, uint256 fundId2)
+	fundId1 != fundId2 => getCurrentManager(fundId1) != getCurrentManager(fundId2) 
